@@ -1,53 +1,36 @@
 "use strict";
-const questions = [
-    {
-        type: 'text',
-        question: 'What will be the sum of 5 and 8',
-        answer: '13',
-    },
-    {
-        type: 'choice',
-        question: 'What is the right variant for 2 × 2?',
-        variants: [
-            { num: 1, value: '3' },
-            { num: 2, value: '4' },
-            { num: 3, value: '5' },
-        ],
-        answer: 1,
-    },
-    {
-        type: 'multi',
-        question: 'Which of these is food?',
-        variants: [
-            { num: 1, value: 'ball' },
-            { num: 2, value: 'banana' },
-            { num: 3, value: 'meat' },
-            { num: 4, value: 'rocket' }
-        ],
-        answer: [
-            1, 2,
-        ],
-    },
-    {
-        type: 'true-false',
-        question: 'Is it true or false that the Earth is round?',
-        variants: [
-            { type: true, value: 'yes' },
-            { type: false, value: 'no' },
-        ],
-        answer: true,
-    },
-    {
-        type: 'chose-true',
-        question: 'Choose the right answer:',
-        variants: [
-            { num: 1, value: 'The sky is blue' },
-            { num: 2, value: 'There are 7 days in a week' },
-            { num: 3, value: 'There are 32 days in May' },
-            { num: 4, value: 'Violet color does not exist' },
-        ],
-        answer: [
-            0, 1,
-        ]
-    },
-];
+/*
+function getJson(url, options = {}) {
+}
+
+{
+    res: true,
+    data: T,
+}
+
+{
+    res: false,
+    status: 'err',
+// }
+let a = getJson<TProduct[]>('https://faceprog.ru/reactcourseapi/products/index.php');
+//getJson<TProduct[]>('https://faceprog.ru/reactcourseapi/products/index.php?id=100')
+*/
+async function getJSON(url, options = {}) {
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        return { res: true, data };
+    }
+    catch (e) {
+        return { res: false, error: e instanceof Error ? e : new Error('something' + String(e)) };
+    }
+}
+(async function () {
+    let catalog = await getJSON('https://faceprog.ru/reactcourseapi/products/index.php');
+    if (catalog.res) {
+        console.log(catalog.data);
+    }
+    else {
+        console.log(catalog.error);
+    }
+})();
